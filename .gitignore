@@ -1,0 +1,9 @@
+# Jetbrains Stuff
+.idea/
+*.iml
+
+# Python Stuff
+*.pyc
+
+# OS Stuff
+.DS_Store
