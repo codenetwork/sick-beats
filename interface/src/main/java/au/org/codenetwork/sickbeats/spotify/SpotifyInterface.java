@@ -2,6 +2,7 @@ package au.org.codenetwork.sickbeats.spotify;
 
 import au.org.codenetwork.sickbeats.BaseInterface;
 import au.org.codenetwork.sickbeats.Track;
+import au.org.codenetwork.sickbeats.util.PlatformUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,11 +13,28 @@ public class SpotifyInterface implements BaseInterface {
     @Override
     public boolean playTrack(Track track) {
         try {
-            String[] args = {
-                    "osascript",
-                    "-e",
-                    "tell app \"Spotify\" to play track \"{}\"".replace("{}", track.getIdentifier())
-            };
+            String[] args = null;
+            switch (PlatformUtil.getOS()) {
+                case WINDOWS:
+                    args = new String[] {
+                            "explorer",
+                            track.getIdentifier()
+                    };
+                    break;
+                case MACOS:
+                    args = new String[] {
+                            "osascript",
+                            "-e",
+                            "tell app \"Spotify\" to play track \"{}\"".replace("{}", track.getIdentifier())
+                    };
+                    break;
+                case LINUX:
+                    args = new String[] {
+                            "spotify",
+                            track.getIdentifier()
+                    };
+                    break;
+            }
             Process process = Runtime.getRuntime().exec(args);
             process.waitFor();
             if (process.exitValue() != 0) {

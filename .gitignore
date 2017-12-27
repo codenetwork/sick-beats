@@ -10,6 +10,10 @@
 
 # Gradle Stuff
 .gradle/
+out/
 
 # Java Stuff
 *.class
+
+# Cover any run directories
+run/
