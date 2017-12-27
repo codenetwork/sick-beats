@@ -1,5 +1,6 @@
 package au.org.codenetwork.sickbeats.spotify;
 
+import au.org.codenetwork.sickbeats.Configuration;
 import au.org.codenetwork.sickbeats.SickBeats;
 import au.org.codenetwork.sickbeats.Track;
 
@@ -7,6 +8,12 @@ import java.util.List;
 
 public class SpotifySickBeats implements SickBeats<SpotifyInterface> {
     private SpotifyInterface spotifyInterface;
+    private Configuration configuration;
+
+    public SpotifySickBeats() {
+        this.configuration = new Configuration();
+        this.configuration.load();
+    }
 
     @Override
     public SpotifyInterface getInterface() {
@@ -14,6 +21,11 @@ public class SpotifySickBeats implements SickBeats<SpotifyInterface> {
             this.spotifyInterface = new SpotifyInterface();
         }
         return this.spotifyInterface;
+    }
+
+    @Override
+    public Configuration getConfiguration() {
+        return this.configuration;
     }
 
     public static void main(String[] args) {
