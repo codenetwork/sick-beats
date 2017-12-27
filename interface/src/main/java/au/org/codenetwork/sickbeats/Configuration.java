@@ -15,9 +15,14 @@ import java.util.UUID;
 
 public class Configuration {
     private static final Gson gson = new GsonBuilder().create();
+    private static final String DEFAULT_HOST = "localhost";
+    private static final int DEFAULT_HOST_PORT = 57438;
 
     private String serverSecret; // Basically App ID - Tells it which instance to connect to.
     private String clientId;
+
+    private String host = DEFAULT_HOST;
+    private int hostPort = DEFAULT_HOST_PORT;
 
     public void load() {
         File file = new File("config.json");
@@ -31,6 +36,10 @@ public class Configuration {
             this.clientId = object.get("clientId").getAsString();
             JsonElement serverSecretElement = object.get("serverSecret");
             this.serverSecret = serverSecretElement == null ? null : serverSecretElement.getAsString(); // Please add null coalescing operator to Java
+            JsonElement hostElement = object.get("host");
+            this.host = hostElement == null ? DEFAULT_HOST : hostElement.getAsString(); // Please add null coalescing operator to Java
+            JsonElement hostPortElement = object.get("hostPort");
+            this.hostPort = hostPortElement == null ? DEFAULT_HOST_PORT : hostPortElement.getAsInt(); // Please add null coalescing operator to Java
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -40,11 +49,33 @@ public class Configuration {
         JsonObject object = new JsonObject();
         object.addProperty("serverSecret", serverSecret);
         object.addProperty("clientId", clientId);
+        if (!host.equals(DEFAULT_HOST)) {
+            object.addProperty("host", host);
+        }
+        if (hostPort != DEFAULT_HOST_PORT) {
+            object.addProperty("hostPort", hostPort);
+        }
         File file = new File("config.json");
         try (PrintWriter writer = new PrintWriter(file)) {
             gson.toJson(object, writer);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getClientId() {
+        return this.clientId;
+    }
+
+    public String getServerSecret() {
+        return this.serverSecret;
+    }
+
+    public String getHost() {
+        return this.host;
+    }
+
+    public int getHostPort() {
+        return this.hostPort;
     }
 }
