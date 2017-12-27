@@ -7,3 +7,9 @@
 
 # OS Stuff
 .DS_Store
+
+# Gradle Stuff
+.gradle/
+
+# Java Stuff
+*.class
