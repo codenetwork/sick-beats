@@ -28,7 +28,6 @@ public class Configuration {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             JsonObject object = gson.fromJson(reader, JsonObject.class);
-            System.out.println(object.toString());
             this.clientId = object.get("clientId").getAsString();
             JsonElement serverSecretElement = object.get("serverSecret");
             this.serverSecret = serverSecretElement == null ? null : serverSecretElement.getAsString(); // Please add null coalescing operator to Java
