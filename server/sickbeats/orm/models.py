@@ -17,5 +17,13 @@ class Instance(db.Model, IDMixin):
     name = db.Column(db.String, nullable=False)
     server_secret = db.Column(db.String, nullable=False)
     venue_user_id = db.Column(db.Integer, nullable=False)
+    platform_id = db.Column(db.Integer, nullable=False)
 
     venue_user = db.relationship('VenueUser')
+    platform = db.relation('Platform')
+
+
+class Platform(db.Model, IDMixin):
+    __tablename__ = 'platform'
+
+    name = db.Column(db.String, nullable=False)
