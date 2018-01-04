@@ -7,4 +7,7 @@ db = SQLAlchemy(app)
 
 
 def run_app():
+    from .orm.db_setup import setup_data
+
+    setup_data(db.session)
     app.run(host='0.0.0.0', port=3000)
