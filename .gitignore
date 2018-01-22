@@ -17,3 +17,6 @@ out/
 
 # Cover any run directories
 run/
+
+# Cover docker directory
+docker/

@@ -18,6 +18,8 @@ public class SickBeats {
     private BaseInterface playInterface;
     private StreamingService streamingService = StreamingService.NONE;
 
+    private SocketHandler socketHandler;
+
     public SickBeats() {
         this.configuration = new Configuration();
         this.configuration.load();
@@ -32,7 +34,7 @@ public class SickBeats {
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(new SocketHandler(self));
+                    ch.pipeline().addLast(socketHandler = new SocketHandler(self));
                 }
             });
 
