@@ -11,8 +11,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-import java.util.List;
-
 public class SickBeats {
     private Configuration configuration;
     private BaseInterface playInterface;
@@ -81,7 +79,7 @@ public class SickBeats {
 
     public static void main(String[] args) {
         SickBeats sickBeats = new SickBeats();
-        sickBeats.initialiseInterface(StreamingService.SPOTIFY);
-        sickBeats.getInterface().playTrack(new Track("spotify:track:66L8V84XCjOpgjoLuI6GC7", "", "", 0, List.of("")));
+//        sickBeats.initialiseInterface(StreamingService.SPOTIFY);
+//        sickBeats.getInterface().playTrack(new Track("spotify:track:66L8V84XCjOpgjoLuI6GC7", "", "", 0, List.of("")));
     }
 }

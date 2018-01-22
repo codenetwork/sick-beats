@@ -1,11 +1,12 @@
 import socket
 import sys
-
 import os
-import _thread
+from threading import Thread
 
 HOST = os.getenv('SERVER_HOST', '')
 PORT = os.getenv('SERVER_POST', 57438)
+
+sock = None
 
 
 def client_listener(conn):
@@ -14,11 +15,13 @@ def client_listener(conn):
         if not data:
             break
         print(data)
+        conn.send(b'{"type":"close"}')
 
     conn.close()
 
 
 def _socket_server():
+    global sock
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         sock.bind((HOST, PORT))
@@ -33,8 +36,13 @@ def _socket_server():
     while True:
         conn, addr = sock.accept()
         print('Connected with ' + addr[0] + ':' + str(addr[1]))
-        _thread.start_new_thread(client_listener, (conn,))
+        Thread(target=client_listener, args=(conn,)).start()
 
 
 def setup_socket_server():
-    _thread.start_new_thread(_socket_server, ())
+    Thread(target=_socket_server).start()
+
+
+def close_socker_server():
+    # TODO
+    pass

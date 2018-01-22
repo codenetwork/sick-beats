@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from .socket_server import setup_socket_server
+from .socket_server import setup_socket_server, close_socker_server
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://sickbeats:sickbeats@localhost/sickbeats'
@@ -13,3 +13,4 @@ def run_app():
     setup_socket_server()
     setup_data(db.session)
     app.run(host='0.0.0.0', port=3000)
+    close_socker_server()

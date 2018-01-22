@@ -4,6 +4,8 @@ import au.org.codenetwork.sickbeats.SickBeats;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
@@ -12,7 +14,7 @@ import io.netty.util.CharsetUtil;
 
 import java.nio.charset.Charset;
 
-public class SocketHandler extends SimpleChannelInboundHandler<Packet> {
+public class SocketHandler extends SimpleChannelInboundHandler<ByteBuf> {
     private static final Gson gson = new GsonBuilder().create();
 
     private SickBeats sickBeats;
@@ -37,7 +39,11 @@ public class SocketHandler extends SimpleChannelInboundHandler<Packet> {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         this.handlerContext = ctx;
 
-        sendMessage("{\"message\":\"test message\"}");
+        JsonObject connectMessage = new JsonObject();
+        connectMessage.addProperty("type", "connect");
+        connectMessage.addProperty("clientId", this.sickBeats.getConfiguration().getClientId());
+        connectMessage.addProperty("serverSecret", this.sickBeats.getConfiguration().getServerSecret());
+        sendMessage(gson.toJson(connectMessage));
     }
 
     @Override
@@ -47,9 +53,14 @@ public class SocketHandler extends SimpleChannelInboundHandler<Packet> {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Packet msg) throws Exception {
-        String message = new String(msg.message, Charset.forName("UTF-8"));
-        JsonElement element = gson.fromJson(message, JsonElement.class);
-
+    protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+        String message = msg.toString(Charset.forName("UTF-8"));
+        System.out.println(message);
+        JsonObject object = gson.fromJson(message, JsonElement.class).getAsJsonObject();
+        if (object.get("type").getAsString().equals("close")) {
+            System.out.println("Connection closed by remote host");
+            ctx.close();
+            return;
+        }
     }
 }
