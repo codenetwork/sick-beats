@@ -1,4 +1,4 @@
-# SickBeats
+# SickBeats [![Build Status](https://travis-ci.org/codenetwork/sick-beats.svg?branch=master)](https://travis-ci.org/codenetwork/sick-beats)
 
 SickBeats is a [CodeNetwork](https://www.facebook.com/groups/WeCodeAlot/) group project.
 
