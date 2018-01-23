@@ -1,7 +1,12 @@
 import socket
 import sys
 import os
+import json
 from threading import Thread
+
+from sickbeats.app import db
+from sickbeats import orm
+from .common_messages import *
 
 HOST = os.getenv('SERVER_HOST', '')
 PORT = os.getenv('SERVER_POST', 57438)
@@ -13,10 +18,28 @@ def client_listener(conn):
     while True:
         data = conn.recv(1024)
         if not data:
+            close_message = 'Malformed packet'
             break
-        print(data)
-        conn.send(b'{"type":"close"}')
+        message = json.loads(data)
+        if 'type' not in message:
+            close_message = 'Malformed packet'
+            break
+        print(message)
+        message_type = message['type']
+        if message_type == 'connect':
+            if 'serverSecret' not in message:
+                close_message = 'No server secret provided'
+                break
+            instance = db.query(orm.Instance).filter(orm.Instance.id == message['serverSecret']).first()
+            if not instance:
+                close_message = 'Incorrect server secret'
+                break
+            send_message(conn, {'type': 'platform', 'platform': instance.platform.name})
 
+    close_packet = CLOSE_CONNECTION
+    if close_message:
+        close_packet.update({'message': close_message})
+    send_message(conn, close_packet)
     conn.close()
 
 

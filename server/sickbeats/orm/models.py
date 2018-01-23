@@ -14,7 +14,7 @@ class Instance(db.Model, IDMixin):
     __tablename__ = 'instance'
 
     name = db.Column(db.String, nullable=False)
-    server_secret = db.Column(db.String, nullable=False)
+    server_secret = db.Column(db.String, nullable=False, unique=True)
     venue_user_id = db.Column(db.Integer, db.ForeignKey('venueuser.id'), nullable=False)
     platform_id = db.Column(db.Integer, db.ForeignKey('platform.id'), nullable=False)
 

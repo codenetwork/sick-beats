@@ -1,6 +1,7 @@
 package au.org.codenetwork.sickbeats.socket;
 
 import au.org.codenetwork.sickbeats.SickBeats;
+import au.org.codenetwork.sickbeats.StreamingService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -57,10 +58,21 @@ public class SocketHandler extends SimpleChannelInboundHandler<ByteBuf> {
         String message = msg.toString(Charset.forName("UTF-8"));
         System.out.println(message);
         JsonObject object = gson.fromJson(message, JsonElement.class).getAsJsonObject();
-        if (object.get("type").getAsString().equals("close")) {
-            System.out.println("Connection closed by remote host");
+        if (object.get("type") == null) {
+            System.out.println("Malformed packet");
             ctx.close();
             return;
+        }
+        String type = object.get("type").getAsString();
+        switch (type) {
+            case "close":
+                System.out.println("Connection closed by remote host");
+                ctx.close();
+                return;
+            case "platform":
+                String platform = object.get("platform").getAsString();
+                this.sickBeats.initialiseInterface(StreamingService.valueOf(platform.toUpperCase()));
+                break;
         }
     }
 }
