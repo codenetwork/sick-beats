@@ -5,7 +5,7 @@ from .db_mixins import IDMixin, HashedPasswordMixin
 class VenueUser(db.Model, IDMixin, HashedPasswordMixin):
     __tablename__ = 'venueuser'
 
-    username = db.Column(db.String, nullable=False)
+    username = db.Column(db.String, nullable=False, unique=True)
     email = db.Column(db.String, nullable=False)
     display_name = db.Column(db.String, nullable=False)
 
@@ -14,7 +14,7 @@ class Instance(db.Model, IDMixin):
     __tablename__ = 'instance'
 
     name = db.Column(db.String, nullable=False)
-    server_secret = db.Column(db.String, nullable=False)
+    server_secret = db.Column(db.String, nullable=False, unique=True)
     venue_user_id = db.Column(db.Integer, db.ForeignKey('venueuser.id'), nullable=False)
     platform_id = db.Column(db.Integer, db.ForeignKey('platform.id'), nullable=False)
 
@@ -37,7 +37,7 @@ class Album(db.Model, IDMixin):
 class Platform(db.Model, IDMixin):
     __tablename__ = 'platform'
 
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=False, unique=True)
 
 
 class Song(db.Model):
