@@ -2,6 +2,8 @@ package au.org.codenetwork.sickbeats.socket;
 
 import au.org.codenetwork.sickbeats.SickBeats;
 import au.org.codenetwork.sickbeats.StreamingService;
+import au.org.codenetwork.sickbeats.Track;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -72,6 +74,13 @@ public class SocketHandler extends SimpleChannelInboundHandler<ByteBuf> {
             case "platform":
                 String platform = object.get("platform").getAsString();
                 this.sickBeats.initialiseInterface(StreamingService.valueOf(platform.toUpperCase()));
+                break;
+            case "play":
+                String identifier = object.get("identifier").getAsString();
+                String title = object.get("title").getAsString();
+                String artist = object.get("artist").getAsString();
+                long runtime = object.get("runtime").getAsLong();
+                this.sickBeats.getInterface().playTrack(new Track(identifier, title, artist, runtime, Lists.newArrayList()));
                 break;
         }
     }

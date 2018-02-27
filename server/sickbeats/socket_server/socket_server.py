@@ -35,7 +35,9 @@ def client_listener(conn):
                 close_message = 'Incorrect server secret'
                 break
             send_message(conn, {'type': 'platform', 'platform': instance.platform.name})
-
+        if message_type == 'next':
+            # The client has requested a song. Give from the queue, or make one up.
+            pass
     close_packet = CLOSE_CONNECTION
     if close_message:
         close_packet.update({'message': close_message})

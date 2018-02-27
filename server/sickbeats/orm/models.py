@@ -40,10 +40,10 @@ class Platform(db.Model, IDMixin):
     name = db.Column(db.String, nullable=False, unique=True)
 
 
-class Song(db.Model):
+class Song(db.Model, IDMixin):
     __tablename__ = 'song'
 
-    id = db.Column(db.String, primary_key=True, nullable=False)
+    identifier = db.Column(db.String, unique=True, nullable=False)
     name = db.Column(db.String, nullable=True)
     album_id = db.Column(db.Integer, db.ForeignKey('album.id'), nullable=True)
 
@@ -53,7 +53,7 @@ class Song(db.Model):
 class SongArtistMapping(db.Model, IDMixin):
     __tablename__ = 'songartistmapping'
 
-    song_id = db.Column(db.String, db.ForeignKey('song.id'), nullable=False)
+    song_id = db.Column(db.Integer, db.ForeignKey('song.id'), nullable=False)
     artist_id = db.Column(db.Integer, db.ForeignKey('artist.id'), nullable=False)
 
     song = db.relationship('Song')
@@ -73,4 +73,15 @@ class AlbumArtistMapping(db.Model, IDMixin):
 class Queue(db.Model, IDMixin):
     __tablename__ = 'queue'
 
-    song_id = db.Column(db.String, db.ForeignKey('song.id'), nullable=False)
+    instance_id = db.Column(db.Integer, db.ForeignKey('instance.id'), nullable=False)
+    song_id = db.Column(db.Integer, db.ForeignKey('song.id'), nullable=False)
+    manual = db.Column(db.Boolean, nullable=False, default=False)
+    place_in_queue = db.Column(db.Integer, nullable=False)
+
+
+class History(db.Model, IDMixin):
+    __tablename__ = 'history'
+
+    instance_id = db.Column(db.Integer, db.ForeignKey('instance.id'), nullable=False)
+    song_id = db.Column(db.Integer, db.ForeignKey('song.id'), nullable=False)
+    place_in_queue = db.Column(db.Integer, nullable=False)
