@@ -15,12 +15,17 @@
     "redux-thunk": "^2.2.0"
   },
   "scripts": {
+    "scss:build": "node-sass src/ -o src/",
+    "prescss:watch": "run-s scss:build",
+    "scss:watch": "node-sass src/ -o src/ --watch --recursive",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "flow-bin": "^0.68.0"
+    "flow-bin": "^0.68.0",
+    "node-sass": "^4.8.3",
+    "npm-run-all": "^4.1.2"
   }
 }

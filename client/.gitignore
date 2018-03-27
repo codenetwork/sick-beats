@@ -9,6 +9,9 @@
 # production
 /build
 
+# Don't store artifacts ever!
+# src/**/*.css
+
 # misc
 .DS_Store
 .env.local
