@@ -10,7 +10,7 @@
 /build
 
 # Don't store artifacts ever!
-# src/**/*.css
+src/**/*.css
 
 # misc
 .DS_Store
