@@ -35,11 +35,11 @@ public class SpotifyInterface implements BaseInterface {
                     };
                     break;
             }
-            Process process = Runtime.getRuntime().exec(args);
+            var process = Runtime.getRuntime().exec(args);
             process.waitFor();
             if (process.exitValue() != 0) {
-                InputStreamReader isr = new InputStreamReader(process.getErrorStream());
-                BufferedReader br = new BufferedReader(isr);
+                var isr = new InputStreamReader(process.getErrorStream());
+                var br = new BufferedReader(isr);
                 String line;
                 while ((line = br.readLine()) != null)
                     System.out.println(line);

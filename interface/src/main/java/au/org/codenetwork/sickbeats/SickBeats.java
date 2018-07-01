@@ -23,9 +23,9 @@ public class SickBeats {
         this.configuration.load();
 
         EventLoopGroup workerGroup = new NioEventLoopGroup();
-        final SickBeats self = this;
+        final var self = this;
         try {
-            Bootstrap b = new Bootstrap();
+            var b = new Bootstrap();
             b.group(workerGroup);
             b.channel(NioSocketChannel.class);
             b.option(ChannelOption.SO_KEEPALIVE, true);
@@ -37,7 +37,7 @@ public class SickBeats {
             });
 
             // Start the client.
-            ChannelFuture f = b.connect(configuration.getHost(), configuration.getHostPort()).sync();
+            var f = b.connect(configuration.getHost(), configuration.getHostPort()).sync();
 
             // Wait until the connection is closed.
             f.channel().closeFuture().sync();
@@ -78,7 +78,7 @@ public class SickBeats {
     }
 
     public static void main(String[] args) {
-        SickBeats sickBeats = new SickBeats();
+        var sickBeats = new SickBeats();
 //        sickBeats.initialiseInterface(StreamingService.SPOTIFY);
 //        sickBeats.getInterface().playTrack(new Track("spotify:track:66L8V84XCjOpgjoLuI6GC7", "", "", 0, List.of("")));
     }

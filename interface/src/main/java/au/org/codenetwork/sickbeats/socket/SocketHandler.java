@@ -29,7 +29,7 @@ public class SocketHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     public void sendMessage(String msgToSend) {
         if (handlerContext != null) {
-            ChannelFuture cf = handlerContext.writeAndFlush(Unpooled.copiedBuffer(msgToSend, CharsetUtil.UTF_8));
+            var cf = handlerContext.writeAndFlush(Unpooled.copiedBuffer(msgToSend, CharsetUtil.UTF_8));
             if (!cf.isSuccess()) {
                 System.out.println("Failed to send: " + cf.cause());
             }
@@ -42,7 +42,7 @@ public class SocketHandler extends SimpleChannelInboundHandler<ByteBuf> {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         this.handlerContext = ctx;
 
-        JsonObject connectMessage = new JsonObject();
+        var connectMessage = new JsonObject();
         connectMessage.addProperty("type", "connect");
         connectMessage.addProperty("clientId", this.sickBeats.getConfiguration().getClientId());
         connectMessage.addProperty("serverSecret", this.sickBeats.getConfiguration().getServerSecret());
@@ -57,29 +57,29 @@ public class SocketHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-        String message = msg.toString(Charset.forName("UTF-8"));
+        var message = msg.toString(Charset.forName("UTF-8"));
         System.out.println(message);
-        JsonObject object = gson.fromJson(message, JsonElement.class).getAsJsonObject();
+        var object = gson.fromJson(message, JsonElement.class).getAsJsonObject();
         if (object.get("type") == null) {
             System.out.println("Malformed packet");
             ctx.close();
             return;
         }
-        String type = object.get("type").getAsString();
+        var type = object.get("type").getAsString();
         switch (type) {
             case "close":
                 System.out.println("Connection closed by remote host");
                 ctx.close();
                 return;
             case "platform":
-                String platform = object.get("platform").getAsString();
+                var platform = object.get("platform").getAsString();
                 this.sickBeats.initialiseInterface(StreamingService.valueOf(platform.toUpperCase()));
                 break;
             case "play":
-                String identifier = object.get("identifier").getAsString();
-                String title = object.get("title").getAsString();
-                String artist = object.get("artist").getAsString();
-                long runtime = object.get("runtime").getAsLong();
+                var identifier = object.get("identifier").getAsString();
+                var title = object.get("title").getAsString();
+                var artist = object.get("artist").getAsString();
+                var runtime = object.get("runtime").getAsLong();
                 this.sickBeats.getInterface().playTrack(new Track(identifier, title, artist, runtime, Lists.newArrayList()));
                 break;
         }

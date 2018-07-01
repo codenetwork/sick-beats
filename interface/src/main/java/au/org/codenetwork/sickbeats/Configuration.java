@@ -25,20 +25,20 @@ public class Configuration {
     private int hostPort = DEFAULT_HOST_PORT;
 
     public void load() {
-        File file = new File("config.json");
+        var file = new File("config.json");
         if (!file.exists()) {
             clientId = UUID.randomUUID().toString();
             save();
         }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            JsonObject object = gson.fromJson(reader, JsonObject.class);
+        try (var reader = new BufferedReader(new FileReader(file))) {
+            var object = gson.fromJson(reader, JsonObject.class);
             this.clientId = object.get("clientId").getAsString();
-            JsonElement serverSecretElement = object.get("serverSecret");
+            var serverSecretElement = object.get("serverSecret");
             this.serverSecret = serverSecretElement == null ? null : serverSecretElement.getAsString(); // Please add null coalescing operator to Java
-            JsonElement hostElement = object.get("host");
+            var hostElement = object.get("host");
             this.host = hostElement == null ? DEFAULT_HOST : hostElement.getAsString(); // Please add null coalescing operator to Java
-            JsonElement hostPortElement = object.get("hostPort");
+            var hostPortElement = object.get("hostPort");
             this.hostPort = hostPortElement == null ? DEFAULT_HOST_PORT : hostPortElement.getAsInt(); // Please add null coalescing operator to Java
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,7 +46,7 @@ public class Configuration {
     }
 
     public void save() {
-        JsonObject object = new JsonObject();
+        var object = new JsonObject();
         object.addProperty("serverSecret", serverSecret);
         object.addProperty("clientId", clientId);
         if (!host.equals(DEFAULT_HOST)) {
@@ -55,8 +55,8 @@ public class Configuration {
         if (hostPort != DEFAULT_HOST_PORT) {
             object.addProperty("hostPort", hostPort);
         }
-        File file = new File("config.json");
-        try (PrintWriter writer = new PrintWriter(file)) {
+        var file = new File("config.json");
+        try (var writer = new PrintWriter(file)) {
             gson.toJson(object, writer);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
