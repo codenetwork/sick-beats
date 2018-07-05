@@ -9,7 +9,7 @@
 # production
 /build
 
-# Don't store artifacts ever!
+# css
 src/**/*.css
 
 # misc
