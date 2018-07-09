@@ -6,3 +6,18 @@ matrix:
       - cd interface
       script:
       - ./gradlew build test
+    - language: node_js
+      node_js:
+      - "lts/*"
+      before_install:
+      - cd client
+    - language: python
+      python:
+      - "3.6"
+      before_install:
+      - cd server
+      script:
+      - pytest
+cache:
+    directories:
+        - $HOME/.npm

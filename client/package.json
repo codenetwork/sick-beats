@@ -12,11 +12,12 @@
   "scripts": {
     "start": "run-p scss:watch react:start",
     "build": "run-s scss:build react:build",
+    "test": "run-s scss:build react:test",
     "scss:build": "node-sass src/ -o src/",
     "scss:watch": "node-sass src/ -o src/ --watch",
     "react:start": "react-scripts-ts start",
     "react:build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
+    "react:test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
