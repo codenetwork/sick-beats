@@ -7,5 +7,10 @@ matrix:
       script:
       - ./gradlew build test
     - language: node_js
+      node_js:
+      - "lts/*"
       before_install:
       - cd client
+cache:
+    directories:
+        - $HOME/.npm
