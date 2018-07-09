@@ -11,6 +11,13 @@ matrix:
       - "lts/*"
       before_install:
       - cd client
+    - language: python
+      python:
+      - "3.6"
+      before_install:
+      - cd server
+      script:
+      - pytest
 cache:
     directories:
         - $HOME/.npm
