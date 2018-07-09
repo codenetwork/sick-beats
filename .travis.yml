@@ -6,3 +6,6 @@ matrix:
       - cd interface
       script:
       - ./gradlew build test
+    - language: node_js
+      before_install:
+      - cd client
